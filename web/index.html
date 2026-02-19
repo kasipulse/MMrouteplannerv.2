@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MM Courier Route Planner</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_KEY&libraries=places"></script>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.auth = auth;
+  window.db = db;
+
+  // Protect page
+  onAuthStateChanged(auth, user => {
+    if (!user) window.location.href = "/login.html";
+    else window.user = user;
+  });
+
+  window.logout = async () => {
+    await signOut(auth);
+    window.location.href = "/login.html";
+  };
+</script>
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="h-screen flex flex-col">
+
+<!-- Top bar -->
+<div class="flex justify-between items-center p-4 bg-white shadow">
+  <h1 class="font-bold text-xl">MM Courier Route Planner</h1>
+  <button onclick="logout()" class="bg-red-600 text-white px-3 py-1 rounded">Logout</button>
+</div>
+
+<!-- Main -->
+<div class="flex flex-1 overflow-hidden">
+  <!-- Sidebar -->
+  <div id="sidebar" class="w-80 bg-white p-4 overflow-y-auto hidden">
+    <h2 class="text-lg font-bold mb-2">📍 Stops</h2>
+    <p id="progress" class="text-sm mb-3">0 / 0 completed</p>
+    <div id="stopList" class="space-y-2"></div>
+    <button id="upgradePlan" class="mt-4 w-full bg-yellow-500 text-white py-2 rounded">Upgrade Plan</button>
+  </div>
+
+  <!-- Map -->
+  <div id="map" class="flex-1"></div>
+</div>
+
+<!-- Controls -->
+<div class="bg-white p-4 shadow">
+  <input id="newAddress" type="text" placeholder="Enter address" class="border px-3 py-2 rounded w-full mb-2" />
+  <button id="addStop" class="w-full bg-blue-700 text-white py-2 rounded mb-2">Add Stop</button>
+  <button id="optimizeRoute" class="w-full bg-green-700 text-white py-2 rounded mb-2">Optimize Route</button>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
 
