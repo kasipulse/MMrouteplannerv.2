@@ -1,1 +1,3 @@
-
+body { margin:0; font-family:sans-serif; }
+#map { flex:1; height:100%; }
+#sidebar { position:absolute; top:64px; left:0; height:calc(100% - 64px); z-index:50; }
