@@ -1,3 +1,4 @@
+import { auth, db } from "./firebase-config.js";
 import { auth, db, user } from "./index.html";
 
 let stops = [];
